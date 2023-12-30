@@ -1,0 +1,49 @@
+{{>bootstraphead}}
+  <body onload="myfunc()">
+    {{>adminnavbar}}
+          <br>
+    <h2 class="page-title">Edit a page</h2>
+       
+    <a class="btn btn-primary" href="/">Back to all page</a>
+    <br><br>
+     
+     <div id ="editform">
+       
+     </div>
+    
+    
+
+  </body>
+  <script>
+const myfunc=async()=>{
+    const urlparams = new URLSearchParams(window.location.search)
+
+    const id=urlparams.get('id')
+    console.log(id)
+
+    const edit = document.getElementById('editform')
+    edit.innerHTML = `
+         <form action="/pages/edit-page/${id}" method="post">
+       <br>
+           <div class="form-group">
+           <label for="">title</label>
+           <input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title">
+           </div>
+         <br>
+       <div class="form-group">
+           <label for="">Slug</label>
+           <input class="form-control" type="text" name="slug" value="{{slug}}" placeholder="Slug">
+       </div>
+      <br>
+       <div class="form-group">
+           <label for="">Content</label>
+           <textarea class="form-control" name="content" cols="10" rows="7">{{content}}</textarea>
+       </div>
+       <br>
+       <button class="btn btn-primary">Submit</button>
+    </form>
+    `
+}
+  </script>
+  {{>bootstrapscript}}
+</html>

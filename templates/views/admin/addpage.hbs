@@ -1,0 +1,32 @@
+{{>bootstraphead}}
+  <body>
+    {{>adminnavbar}}
+          <br>
+    <h2 class="page-title">Add a page</h2>
+       
+    <a class="btn btn-primary" href="/">Back to all page</a>
+    <br><br>
+
+    <form action="/addpage" method="post">
+       <br>
+           <div class="form-group">
+           <label for="">title</label>
+           <input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title">
+           </div>
+         <br>
+       <div class="form-group">
+           <label for="">Slug</label>
+           <input class="form-control" type="text" name="slug" value="{{slug}}" placeholder="Slug">
+       </div>
+      <br>
+       <div class="form-group">
+           <label for="">Content</label>
+           <textarea class="form-control" name="content" cols="10" rows="7">{{content}}</textarea>
+       </div>
+       <br>
+       <button class="btn btn-primary">Submit</button>
+    </form>
+    
+  </body>
+  {{>bootstrapscript}}
+</html>

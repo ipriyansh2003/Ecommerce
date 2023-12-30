@@ -1,0 +1,96 @@
+{{>bootstraphead}}
+  <body onload="myfunc();myfunc2();myfunc3();">
+    {{>navbar}}
+      <br><br>
+      
+      <div class="container" >
+        
+        <div class="row">
+         
+  <div class="col-sm-4">{{>categories}}</div>
+
+  <div class="col-sm-8">
+            Homepage
+           <br>
+           <div class="row products" id="products" >
+            
+           </div>
+           
+
+           </div>
+</div>
+      </div>
+ 
+      
+  </body>
+  {{>bootstrapscript}}
+  <script>
+
+    const myfunc=async()=>{
+
+         const navbar = document.getElementById('navbaritems')
+          let p = await fetch('http://localhost:5000/pageapi')
+          let parsedata = await p.json()
+
+          let result = ''
+
+          for(let i = 0; i<parsedata.length;i++){
+            result+=`
+            <li class="nav-item" >
+          <a class="nav-link" href="/${parsedata[i].slug}">${parsedata[i].title}</a>
+            </li>
+           `
+          }
+          navbar.innerHTML = result
+        
+         
+    }
+
+    const myfunc2=async()=>{
+         const category = document.getElementById('categoryitems')
+          let p = await fetch('http://localhost:5000/categoryapi')
+          let parsedata = await p.json()
+       
+          let result = ''
+
+          for(let i = 0; i<parsedata.length;i++){
+            result+=`<li class="list-group-item">
+                      <a href="/product/${parsedata[i].title}">${parsedata[i].title}</a></li>
+                    `
+          }
+          category.innerHTML = result
+    }
+
+    const myfunc3=async()=>{
+         const products = document.getElementById('products')
+          let p = await fetch('http://localhost:5000/productapi')
+          let parsedata = await p.json()
+
+          let result = ''
+
+          for(let i = 0; i<parsedata.length; i++){
+            let id = parsedata[i]._id
+            result+=`<div class='col-xa-9 col-md-4' style="margin-top:20px;margin-bottom:20px;border-style: groove;">
+                 <a href="#" class='pa'>
+                  <img src="/${parsedata[i].image}" width="230px" height="186px" >
+                 </a>
+                 <hr>
+                 <h3>${parsedata[i].title}</h3>
+                 <h4>${parsedata[i].price} Rs</h4>
+                 <a href="#">view details</a>
+                 <form action="/cart/${parsedata[i]._id}" method="post">
+                 <button class="btn btn-primary">Add to cart</button>          
+                 </form>       
+            </div>
+                    `
+          }
+        products.innerHTML = result
+    }
+  </script>
+  <style>
+     .pa{
+      display: inline-block;
+      height: 160px;
+     }
+  </style>
+</html>

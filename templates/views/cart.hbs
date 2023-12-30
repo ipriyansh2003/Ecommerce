@@ -1,0 +1,95 @@
+{{>bootstraphead}}
+  <body onload="myfunc();myfunc2();myfunc3();">
+    {{>navbar}}
+      <br><br>
+       <h2 class="page-title">My Cart</h2>
+    
+
+    <form action="/deletecarts" method="post" style="display: inline-block;">
+    <a href="/" class="btn btn-primary">Back to Home Page</a>
+    <button class="btn btn-danger">Clear Cart</button>
+     </form>
+        
+      <br>
+      <br>
+
+    
+        <h3>Total: <span id="total"></span> Rs</h3> 
+      <br>
+  <table class="table table-striped">
+           <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Product Image</th>
+                <th></th>
+                <th>Subtotal</th>
+              </tr>
+           </thead>
+        <tbody id="tabledata">
+          
+           
+        </tbody>
+    </table>
+
+       </body>
+       <script>
+        const myfunc=async()=>{
+         const navbar = document.getElementById('navbaritems')
+          let p = await fetch('http://localhost:5000/pageapi')
+          let parsedata = await p.json()
+
+          let result = ''
+
+          for(let i = 0; i<parsedata.length;i++){
+            result+=`<li class="nav-item" >
+          <a class="nav-link" href="/${parsedata[i].slug}">${parsedata[i].title}</a>
+            </li><hr>`
+          }
+          navbar.innerHTML = result
+
+    }
+    const myfunc2 = async()=>{
+         const tabledata = document.getElementById('tabledata')
+          let p = await fetch('http://localhost:5000/cart/api')
+          let parsedata = await p.json()
+         
+          let result = ''
+          
+          for(let i = 0; i<parsedata.length;i++){
+           let id = parsedata[i]._id
+           
+            result+=`<tr>
+                <td>${parsedata[i].title}</td>
+                <th>${parsedata[i].price}</th>
+                <th>${parsedata[i].quantity}</th>
+                <th><img src="/${parsedata[i].image}" width="100" height="100"></th>
+                <td><form action="/cart/add/${id}" method="post"><button class="btn btn-primary">+</button></form>
+                <form action="/cart/sub/${id}" method="post"><button class="btn btn-danger">-</button></form>
+                <form action="/cart/delete/${id}" method="post"><button class="btn btn-warning">clear</button></form></td>
+                <td>${parsedata[i].subtotal} Rs</td>
+            </tr>`
+          }
+          tabledata.innerHTML = result
+    }
+    const myfunc3 = async()=>
+    {
+       
+         const total = document.getElementById('total')
+          let p = await fetch('http://localhost:5000/cart/api')
+          let parsedata = await p.json()
+         
+          let result = 0;
+          
+          for(let i = 0; i<parsedata.length;i++){
+            result+=parsedata[i].subtotal
+            }
+            total.innerHTML = `${result}`
+    }
+       </script>
+       <style>
+
+       </style>
+  {{>bootstrapscript}}
+  </html>

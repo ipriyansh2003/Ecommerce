@@ -1,0 +1,51 @@
+{{>bootstraphead}}
+  <body onload="myfunc()">
+    {{>adminnavbar}}
+    <br>
+    <h2 class="page-title">Product</h2>
+    <a href="/addproduct" class="btn btn-primary">Add a New Product</a>
+   <br><br>
+     
+     <table class="table table-striped">
+           <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Product Image</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+           </thead>
+        <tbody id="tabledata">
+          
+           
+        </tbody>
+    </table>
+
+  </body>
+  <script>
+    const myfunc=async()=>{
+          
+          const tabledata = document.getElementById('tabledata')
+          let p = await fetch('http://localhost:5000/productapi')
+          let parsedata = await p.json()
+
+          let result = ''
+
+          for(let i = 0; i<parsedata.length;i++){
+           let id = parsedata[i]._id
+            result+=`<tr>
+                <td>${parsedata[i].title}</td>
+                <th>${parsedata[i].price}</th>
+                <th>${parsedata[i].category}</th>
+                <th><img src="/${parsedata[i].image}" width="100" height="100"></th>
+                <td><button class='btn btn-dark'><a href='/products/edit-product?id=${id}'>edit</a></button></td>
+                <td><form action='/products/delete-product/${id}' method='post'><button class='btn btn-primary'>Delete</button></form></td>
+            </tr>`
+          }
+          tabledata.innerHTML = result
+    }
+  </script>
+  {{>bootstrapscript}}
+</html>

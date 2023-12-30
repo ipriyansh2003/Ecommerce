@@ -1,0 +1,77 @@
+{{>bootstraphead}}
+  <body onload="myfunc();func2();">
+    {{>adminnavbar}}
+          <br>
+    <h2 class="page-title">Edit a Product</h2>
+       
+    <a class="btn btn-primary" href="/products">Back to all Categories</a>
+    <br><br>
+     
+     <div id ="editform">
+       
+     </div>
+    
+    
+
+  </body>
+  <script>
+const myfunc=async()=>{
+    const urlparams = new URLSearchParams(window.location.search)
+
+    const id=urlparams.get('id')
+    console.log(id)
+
+    const edit = document.getElementById('editform')
+    edit.innerHTML = `
+         <form action="/products/edit-product/${id}" method="post" enctype="multipart/form-data">
+         <br>
+           <div class="form-group">
+           <label for="">Title</label>
+           <input class="form-control" type="text" name="title" value="{{title}}" placeholder="Title">
+           </div>
+         <br>
+       <div class="form-group">
+           <label for="">Price</label>
+           <input class="form-control" type="text" name="price" value="{{price}}" placeholder="price">
+       </div>
+      <br>
+       <div class="form-group">
+           <label for="">Descriptiont</label>
+           <textarea class="form-control" name="desc" cols="10" rows="7">{{description}}</textarea>
+       </div>
+
+       <br>
+       <div class="form-group">
+           <label for="">Category</label>
+              <select name="category" id="category">
+                
+              </select>
+       </div>
+       <br>
+        <div class="form-group">
+           <label for="">Image</label>
+           <input class="form-control" type="file" name="profileimage" id="img">
+             
+       </div>
+       <br>
+       <button class="btn btn-primary">Submit</button>
+    </form>
+    `
+}
+
+const func2=async()=>{
+          
+          const category = document.getElementById('category')
+          let p = await fetch('http://localhost:5000/categoryapi')
+          let parsedata = await p.json()
+
+          let result = ''
+          for(let i = 0; i<parsedata.length;i++){
+           let id = parsedata[i]._id
+            result+=` <option value="${parsedata[i].title}">${parsedata[i].title}</option>`
+            }
+          category.innerHTML = result
+         }
+  </script>
+  {{>bootstrapscript}}
+</html>
